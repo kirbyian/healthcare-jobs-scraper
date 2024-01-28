@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from bs4 import BeautifulSoup
 import requests
 import csv
@@ -129,15 +128,15 @@ class hse_parser(BaseHTMLParser):
             # Todo: Determine Dept based on Position text
             self.department,self.match_found=self.job_title_in_search_list(self.job_title)
 
-    def get_last_page_number(base_url):
-        response = requests.get(base_url)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        last_page_element = soup.find('li', {'class': 'go-last'})
-        if last_page_element:
-            last_page_url = last_page_element.find('a')['href']
-            last_page_number = int(last_page_url.split('=')[-1])
-            return last_page_number
-        return 1
+def get_last_page_number(base_url):
+    response = requests.get(base_url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    last_page_element = soup.find('li', {'class': 'go-last'})
+    if last_page_element:
+        last_page_url = last_page_element.find('a')['href']
+        last_page_number = int(last_page_url.split('=')[-1])
+        return last_page_number
+    return 1
 
 def main():
     hse_consultants_url = 'https://www.hse.ie/eng/staff/jobs/job-search/medical-dental/consultants/'
