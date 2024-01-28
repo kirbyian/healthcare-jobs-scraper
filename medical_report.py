@@ -153,7 +153,7 @@ def main():
         # HSE POSITIONS
         hse = hse_parser()
         hse.scrape_job_data(hse_base_url, hse_consultants_url, writer, True)
-        hse.scrape_job_data(hse_base_url, hse_non_consultants_url, hse_parser, writer, False)
+        hse.scrape_job_data(hse_base_url, hse_non_consultants_url, writer, False)
 
         # MATER POSITION
         mater_parser.scrape_job_data_mater(writer)
