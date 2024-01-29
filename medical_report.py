@@ -5,7 +5,8 @@ import json
 import email_report
 import mater_parser
 import sys
-#!{sys.executable} -m pip install python-dotenv
+!{sys.executable} -m pip install openpyxl
+from openpyxl import load_workbook
 
 medical_search_list=['cardio','genetics','pharma','internal','derma','gastro',
                         'endocrinol','diabetes','general internal'
@@ -143,8 +144,14 @@ def main():
     hse_non_consultants_url='https://www.hse.ie/eng/staff/jobs/job-search/medical-dental/nchd/sho-registrar/'
     hse_base_url = 'https://www.hse.ie'
 
-    file_name='job_data.csv'
+    wb = load_workbook(filename = 'job_data.xlsx')
+    
+    # Select the active sheet (you can also specify a sheet by name if there are multiple sheets)
+    sheet = wb.active
 
+    # Specify the starting row where you want to write the data
+    start_row = 3  # To append data after the existing content
+    
     with open('job_data.csv', 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['Posted', 'Hospital', 'Position', 'Department', 'Location', 'Duration', 'Deadline', 'Contact', 'Link for Post']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -157,11 +164,26 @@ def main():
 
         # MATER POSITION
         mater_parser.scrape_job_data_mater(writer)
+        
+
+    # Read CSV data from the CSV file
+    with open('job_data.csv', 'r', newline='') as csv_file:
+        csv_reader = csv.reader(csv_file)
+
+        # Skip the header row
+        next(csv_reader)
+        # Iterate through each row in the CSV and write it to the Excel sheet
+        for csv_row in csv_reader:
+            for col_num, value in enumerate(csv_row, start=1):
+                sheet.cell(row=start_row, column=col_num, value=value)
+            start_row += 1
+
+    wb.save('job_data.xlsx')
 
     # Send email after writing is done
-    with open('job_data.csv', 'rb') as f:
+    with open('job_data.xlsx', 'rb') as f:
         file_content = f.read()
-        email_report.send_email_with_attachment(file_content, 'job_data.csv')
+        email_report.send_email_with_attachment(file_content, 'job_data.xlsx')
 
 if __name__ == "__main__":
     main()
