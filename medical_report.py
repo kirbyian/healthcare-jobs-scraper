@@ -6,6 +6,7 @@ import email_report
 import mater_parser
 import sys
 from openpyxl import load_workbook
+import os
 
 medical_search_list=['cardio','genetics','pharma','internal','derma','gastro',
                         'endocrinol','diabetes','general internal'
@@ -143,7 +144,8 @@ def main():
     hse_non_consultants_url='https://www.hse.ie/eng/staff/jobs/job-search/medical-dental/nchd/sho-registrar/'
     hse_base_url = 'https://www.hse.ie'
 
-    wb = load_workbook(filename = './job_data.xlsx')
+    excel_file=str(os.getcwd()+'job_data.xlsx'
+    wb = load_workbook(filename = excel_file)
     
     # Select the active sheet (you can also specify a sheet by name if there are multiple sheets)
     sheet = wb.active
@@ -177,12 +179,12 @@ def main():
                 sheet.cell(row=start_row, column=col_num, value=value)
             start_row += 1
 
-    wb.save('job_data.xlsx')
+    wb.save(excel_file)
 
     # Send email after writing is done
-    with open('job_data.xlsx', 'rb') as f:
+    with open(excel_file, 'rb') as f:
         file_content = f.read()
-        email_report.send_email_with_attachment(file_content, 'job_data.xlsx')
+        email_report.send_email_with_attachment(file_content, excel_file)
 
 if __name__ == "__main__":
     main()
