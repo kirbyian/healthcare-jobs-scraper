@@ -144,7 +144,7 @@ def main():
     hse_non_consultants_url='https://www.hse.ie/eng/staff/jobs/job-search/medical-dental/nchd/sho-registrar/'
     hse_base_url = 'https://www.hse.ie'
 
-    excel_file=str(os.getcwd()+'job_data.xlsx'
+    excel_file=str(os.getcwd())+'job_data.xlsx'
     wb = load_workbook(filename = excel_file)
     
     # Select the active sheet (you can also specify a sheet by name if there are multiple sheets)
