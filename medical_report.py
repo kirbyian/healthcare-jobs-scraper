@@ -5,7 +5,6 @@ import json
 import email_report
 import mater_parser
 import sys
-!{sys.executable} -m pip install openpyxl
 from openpyxl import load_workbook
 
 medical_search_list=['cardio','genetics','pharma','internal','derma','gastro',
