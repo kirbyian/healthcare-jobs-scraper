@@ -3,42 +3,7 @@ import requests
 import json
 import re
 from bs4 import BeautifulSoup
-
-medical_search_list=['cardiol','genetics','pharma','internal','derma','gastro',
-                        'endocrinol','diabetes','general internal'
-                        'genitourinary','geriatric','infectious disease','oncolog',
-                        'nephrologo','neurol','pallative','rehab',
-                         'resp','rheumatolog','gynaco','haem']
-
-medical_substrings_to_depts={
-    'cardiol':'Cardiology',
-    'genetics':'Clinical Genetics',
-    'derma':'Dermatology',
-    'endocrinol':'Endocrinology & Diabetes Mellitus',
-    'diabetes':'Endocrinology & Diabetes Mellitus',
-    'gynaco':'Obs & Gyna',
-    'gastro':'Gastro & General Physician',
-    'geriatric':'Geriatrics',
-    'infectious disease':'Infectious Diseases',
-    'oncolog':'Oncology',
-    'resp':'Resp & GIM',
-    'neurol':'Neurology',
-    'rheumatolog':'Rheumatology & General Physician',
-    'haem':'Haematology',
-    'rehab':'Rehabilitation Medicine'
-}
-
-def job_title_in_search_list(job_title):
-        for substring in medical_search_list:
-            amended_job_title=''
-            if 'consultant' in job_title.lower():
-                amended_job_title='Consultant'
-            else:
-                amended_job_title='Registrar'
-            if substring.lower() in job_title.lower():
-                mapped_value = medical_substrings_to_depts.get(substring.lower(), "unknown")
-                return mapped_value,True,amended_job_title
-        return '',False,''
+import hospital_parser_util
 
 def parse_job_page(job_id):
 
@@ -90,7 +55,7 @@ def extract_closing_date(text):
     return '; '.join(dates)
 
 def parse_mater_details(job,writer):
-        dept,is_match,amended_job_title=job_title_in_search_list(job['JOBNAME'])
+        dept,is_match,amended_job_title=hospital_parser_util.job_title_in_search_list(job['JOBNAME'])
         if is_match:
             contact,deadline=parse_job_page(job['JOBID'])
             writer.writerow({

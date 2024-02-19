@@ -4,33 +4,13 @@ import csv
 import json
 import email_report
 import mater_parser
+import public_jobs_parser
 import sys
 from openpyxl import load_workbook
 import os
+import hospital_parser_util
+import saolta_parser
 
-medical_search_list=['cardio','genetics','pharma','internal','derma','gastro',
-                        'endocrinol','diabetes','general internal'
-                        'genitourinary','geriatric','infectious disease','oncolog',
-                        'nephrologo','neuro','pallative','rehab',
-                         'resp','rheumatolog','gynaco','haem']
-
-medical_substrings_to_depts={
-    'cardio':'Cardiology',
-    'genetics':'Clinical Genetics',
-    'derma':'Dermatology',
-    'endocrinol':'Endocrinology & Diabetes Mellitus',
-    'diabetes':'Endocrinology & Diabetes Mellitus',
-    'gynaco':'Obs & Gyna',
-    'gastro':'Gastro & General Physician',
-    'geriatric':'Geriatrics',
-    'infectious disease':'Infectious Diseases',
-    'oncolog':'Oncology',
-    'resp':'Resp & GIM',
-    'neuro':'Neurology',
-    'rheumatolog':'Rheumatology & General Physician',
-    'haem':'Haematology',
-    'rehab':'Rehabilitation Medicine'
-}
 
 class BaseHTMLParser:
     
@@ -51,12 +31,6 @@ class BaseHTMLParser:
         self.parse_job_page(job_url)
         return self.job_title, self.hospital, self.location,self.deadline, self.contact, self.duration,self.department,self.match_found
 
-    def job_title_in_search_list(self,job_title):
-        for substring in medical_search_list:
-            if substring.lower() in job_title.lower():
-                mapped_value = medical_substrings_to_depts.get(substring.lower(), "unknown")
-                return mapped_value,True
-        return '',False
 
 
 
@@ -127,7 +101,7 @@ class hse_parser(BaseHTMLParser):
                 self.duration = "Perm" if "perm" in duration_text else "Temp"
     
             # Todo: Determine Dept based on Position text
-            self.department,self.match_found=self.job_title_in_search_list(self.job_title)
+            self.department,self.match_found,self.job_title=hospital_parser_util.job_title_in_search_list(self.job_title)
 
 def get_last_page_number(base_url):
     response = requests.get(base_url)
@@ -165,6 +139,8 @@ def main():
 
         # MATER POSITION
         mater_parser.scrape_job_data_mater(writer)
+        public_jobs_parser.scrape_job_data(writer)
+        saolta_parser.scrape_job_data(writer)
         
 
     # Read CSV data from the CSV file
