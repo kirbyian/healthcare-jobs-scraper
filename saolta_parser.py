@@ -10,7 +10,6 @@ import hospital_parser_util
 from selenium.webdriver.chrome.service import Service
 
 
-
 def parse_job_page(writer, driver):
 
      links = driver.find_elements(By.XPATH,"//td[@class='views-field views-field-title']/a")
