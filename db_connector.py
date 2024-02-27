@@ -16,6 +16,11 @@ port = os.environ.get("DB_PORT")
 
 # Connect to your PostgreSQL database
 try:
+    print(dbname)
+    print(user)
+    print(password)
+    print(host)
+    print(port)
     conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
     print("Connected to PostgreSQL server")
 except psycopg2.Error as e:
