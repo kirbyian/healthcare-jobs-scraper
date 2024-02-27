@@ -10,6 +10,7 @@ from openpyxl import load_workbook
 import os
 import hospital_parser_util
 import saolta_parser
+import db_connector
 
 
 class BaseHTMLParser:
@@ -113,6 +114,15 @@ def get_last_page_number(base_url):
         return last_page_number
     return 1
 
+def insertDBValues(values_map):
+
+    db_connector.insert_record(values_map[9], values_map[5],
+                               values_map[3], values_map[4],
+                               values_map[6], values_map[7],
+                               values_map[8], values_map[9])
+
+
+
 def main():
     hse_consultants_url = 'https://www.hse.ie/eng/staff/jobs/job-search/medical-dental/consultants/'
     hse_non_consultants_url='https://www.hse.ie/eng/staff/jobs/job-search/medical-dental/nchd/sho-registrar/'
@@ -150,9 +160,14 @@ def main():
         # Skip the header row
         next(csv_reader)
         # Iterate through each row in the CSV and write it to the Excel sheet
+        values_map = dict()
         for csv_row in csv_reader:
+            values_map = dict(zip(range(1, len(csv_row) + 1), csv_row))
             for col_num, value in enumerate(csv_row, start=1):
                 sheet.cell(row=start_row, column=col_num, value=value)
+                if col_num>1:
+                    values_map[col_num]=value
+            insertDBValues(values_map)
             start_row += 1
 
     wb.save(excel_file)
