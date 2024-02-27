@@ -15,13 +15,11 @@ host = os.environ.get("DB_HOST")
 port = os.environ.get("DB_PORT")
 
 # Connect to your PostgreSQL database
-conn = psycopg2.connect(
-    dbname=dbname,
-    user=user,
-    password=password,
-    host=host,
-    port=port
-)
+try:
+    conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+    print("Connected to PostgreSQL server")
+except psycopg2.Error as e:
+    print(f"Error connecting to PostgreSQL server: {e}")
 
 # Define your SQL statement for insertion
 def insert_record(job_reference, hospital, position, department, duration, deadline, contact, link):
