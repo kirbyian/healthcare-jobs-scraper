@@ -1,3 +1,4 @@
+from email.utils import format_datetime
 from bs4 import BeautifulSoup
 import requests
 import csv
@@ -11,6 +12,7 @@ import os
 import hospital_parser_util
 import saolta_parser
 import db_connector
+import candidate_manager_parser
 
 
 class BaseHTMLParser:
@@ -27,13 +29,11 @@ class BaseHTMLParser:
 
     def parse_job_page(self, job_url):
         raise NotImplementedError("Subclasses must implement the parse_job_page method.")
+    
 
     def get_job_details(self, job_url):
         self.parse_job_page(job_url)
         return self.job_title, self.hospital, self.location,self.deadline, self.contact, self.duration,self.department,self.match_found
-
-
-
 
 class hse_parser(BaseHTMLParser):
     
@@ -58,9 +58,13 @@ class hse_parser(BaseHTMLParser):
                 else:
                     job_title = 'Registrar'
                 if match_found:
+                    if deadline!='':
+                        formatted_deadline=hospital_parser_util.formatDate(deadline)
                     writer.writerow({'Position': job_title, 'Hospital': hospital, 'Location': location, 'Link for Post': job_link,
-                                     'Deadline': deadline, 'Contact': contact, 'Duration': duration, 'Department': department})
+                                     'Deadline': formatted_deadline, 'Contact': contact, 'Duration': duration, 'Department': department})
     
+   
+
     def parse_job_page(self, job_url):
             response = requests.get(job_url)
             soup = BeautifulSoup(response.text, 'html.parser')
@@ -151,6 +155,7 @@ def main():
         mater_parser.scrape_job_data_mater(writer)
         public_jobs_parser.scrape_job_data(writer)
         saolta_parser.scrape_job_data(writer)
+        candidate_manager_parser.scrape_job_data(writer)
         
 
     # Read CSV data from the CSV file

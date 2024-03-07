@@ -6,7 +6,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 import hospital_parser_util
-from selenium.webdriver.chrome.service import Service
 
 
 def parse_job_page(url,writer, driver):
@@ -28,6 +27,8 @@ def parse_job_page(url,writer, driver):
      department,match_found,job_title_amended= hospital_parser_util.job_title_in_search_list(job_title)
      #Department
      if match_found:
+            if deadline!='':
+                formatted_deadline=hospital_parser_util.formatDate(deadline)
             writer.writerow({'Position': job_title_amended, 'Hospital': hospital, 'Location': location, 'Link for Post': url,
             'Deadline': deadline, 'Contact': contact, 'Duration': duration, 'Department': department})
 
@@ -36,8 +37,8 @@ def scrape_job_data(writer):
     
         url = "https://www.publicjobs.ie/en/job-search?category=3&county=&searchphrase="
 
-        browser_driver = Service('/usr/lib/chromium-browser/chromedriver')
-        driver = webdriver.Chrome(service=browser_driver)
+        #browser_driver = Service('/usr/lib/chromium-browser/chromedriver')
+        driver = webdriver.Chrome()
 
         # Step 2: Perform the search
         driver.get(url)

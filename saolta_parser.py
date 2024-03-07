@@ -7,7 +7,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 import hospital_parser_util
-from selenium.webdriver.chrome.service import Service
 
 
 def parse_job_page(writer, driver):
@@ -49,16 +48,18 @@ def parse_job_page(writer, driver):
                         contact = driver.find_element(By.XPATH,"//p[contains(text(), 'Informal enquiries to')]").text
                     except Exception as e:
                         print("Unable to find element", e)
+                    if deadline!='':
+                        formatted_deadline=hospital_parser_util.formatDate(deadline)
                     writer.writerow({'Position': amended_job_title, 'Hospital': hospital, 'Location': '', 'Link for Post': job_href,
-                'Deadline': deadline, 'Contact': contact, 'Duration': '', 'Department': department})
+                'Deadline': formatted_deadline, 'Contact': contact, 'Duration': '', 'Department': department})
             
 
 def scrape_job_data(writer):
     
         url = "https://www.saolta.ie/jobs"
 
-        browser_driver = Service('/usr/lib/chromium-browser/chromedriver')
-        driver = webdriver.Chrome(service=browser_driver)
+       # browser_driver = Service('/usr/lib/chromium-browser/chromedriver')
+        driver = webdriver.Chrome()
 
         # Step 2: Perform the search
         driver.get(url)
