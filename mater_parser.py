@@ -5,6 +5,7 @@ import re
 from bs4 import BeautifulSoup
 import hospital_parser_util
 
+
 def parse_job_page(job_id):
 
     url = "https://www.rezoomo.com/index.cfm"

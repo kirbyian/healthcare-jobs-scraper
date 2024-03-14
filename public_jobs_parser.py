@@ -38,8 +38,8 @@ def scrape_job_data(writer):
     
         url = "https://www.publicjobs.ie/en/job-search?category=3&county=&searchphrase="
 
-        driver = Service('/usr/lib/chromium-browser/chromedriver')
-        #driver = webdriver.Chrome()
+        browser_driver = Service('/usr/lib/chromium-browser/chromedriver')
+        driver = webdriver.Chrome(service=browser_driver)
 
         # Step 2: Perform the search
         driver.get(url)
