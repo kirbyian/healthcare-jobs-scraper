@@ -68,8 +68,8 @@ def scrape_job_data(writer):
     
         url = "https://www.candidatemanager.net/cm/p/pJobs.aspx?mid=*syu~op%7dfli&sid=*qmkqmk&Site=NCHD"
 
-        driver = Service('/usr/lib/chromium-browser/chromedriver')
-        #driver = webdriver.Chrome()
+        browser_driver = Service('/usr/lib/chromium-browser/chromedriver')
+        driver = webdriver.Chrome(service=browser_driver)
 
         # Step 2: Perform the search
         driver.get(url)
