@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 import hospital_parser_util
+from selenium.webdriver.chrome.service import Service
 
 
 def parse_job_page(url,writer, driver):
@@ -37,8 +38,8 @@ def scrape_job_data(writer):
     
         url = "https://www.publicjobs.ie/en/job-search?category=3&county=&searchphrase="
 
-        #browser_driver = Service('/usr/lib/chromium-browser/chromedriver')
-        driver = webdriver.Chrome()
+        driver = Service('/usr/lib/chromium-browser/chromedriver')
+        #driver = webdriver.Chrome()
 
         # Step 2: Perform the search
         driver.get(url)
