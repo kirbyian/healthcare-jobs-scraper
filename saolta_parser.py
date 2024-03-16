@@ -60,7 +60,9 @@ def scrape_job_data(writer):
         url = "https://www.saolta.ie/jobs"
 
         browser_driver = Service('/usr/lib/chromium-browser/chromedriver')
-        driver = webdriver.Chrome(service=browser_driver)
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        driver = webdriver.Chrome(service=browser_driver,chrome_options=chrome_options)
 
         # Step 2: Perform the search
         driver.get(url)
