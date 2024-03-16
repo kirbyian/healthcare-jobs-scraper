@@ -72,6 +72,7 @@ def scrape_job_data(writer):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.binary_location = '/usr/bin/chromium-browser'
         chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--remote-debugging-pipe')
         driver = webdriver.Chrome(service=browser_driver,chrome_options=chrome_options)
 
         # Step 2: Perform the search
