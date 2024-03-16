@@ -61,6 +61,7 @@ def scrape_job_data(writer):
 
         browser_driver = Service('/usr/lib/chromium-browser/chromedriver')
         chrome_options = webdriver.ChromeOptions()
+        chrome_options.binary_location = '/usr/bin/chromium-browser'
         chrome_options.add_argument('--headless')
         driver = webdriver.Chrome(service=browser_driver,chrome_options=chrome_options)
 
