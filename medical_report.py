@@ -142,7 +142,7 @@ def main():
     # Specify the starting row where you want to write the data
     start_row = 3  # To append data after the existing content
     
-    with open('job_data.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open('/home/pi/healthcare-jobs-scraper/job_data.csv', 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['Posted', 'Hospital', 'Position', 'Department', 'Location', 'Duration', 'Deadline', 'Contact', 'Link for Post']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -161,7 +161,7 @@ def main():
         
 
     # Read CSV data from the CSV file
-    with open('job_data.csv', 'r', newline='') as csv_file:
+    with open('home/pi/healthcare-jobs-scraper/job_data.csv', 'r', newline='') as csv_file:
         csv_reader = csv.reader(csv_file)
 
         # Skip the header row
