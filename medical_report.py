@@ -161,7 +161,7 @@ def main():
         
 
     # Read CSV data from the CSV file
-    with open('home/pi/healthcare-jobs-scraper/job_data.csv', 'r', newline='') as csv_file:
+    with open('/home/pi/healthcare-jobs-scraper/job_data.csv', 'r', newline='') as csv_file:
         csv_reader = csv.reader(csv_file)
 
         # Skip the header row
