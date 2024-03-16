@@ -15,6 +15,7 @@ import db_connector
 import candidate_manager_parser
 
 
+
 class BaseHTMLParser:
     
     def __init__(self):
@@ -156,6 +157,7 @@ def main():
         public_jobs_parser.scrape_job_data(writer)
         saolta_parser.scrape_job_data(writer)
         candidate_manager_parser.scrape_job_data(writer)
+        db_connector.updateArchivedRecords()
         
 
     # Read CSV data from the CSV file

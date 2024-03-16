@@ -66,4 +66,4 @@ def formatDate(deadline):
             date_obj = datetime.strptime(deadline, "%d/%m/%Y %H:%M")
             return date_obj.strftime("%-d/%-m/%Y")
         else:
-            return deadline
+            return ''

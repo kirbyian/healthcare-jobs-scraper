@@ -62,3 +62,56 @@ def insert_record(job_reference, hospital, position, department, duration, deadl
 
     # Close the cursor
     cur.close()
+
+# Define your SQL statement for insertion
+def updateArchivedRecords():
+
+
+    try:
+        conn = psycopg2.connect(
+            dbname=dbname,
+            user=user,
+            password=password,
+            host=host,
+            port=port
+        )
+        cur = conn.cursor()
+        
+        sql = """
+            WITH ValidDates AS (
+                SELECT
+                    id,
+                    deadline,
+                    (REGEXP_MATCHES(deadline, '^(\d{1,2})/(\d{1,2})/(\d{4})$'))::varchar AS matched_date
+                FROM
+                    medicalrecruiter.recuiter_job_data
+                WHERE
+                    deadline IS NOT NULL
+                    AND deadline <> ''
+                    AND is_archived = false
+            )
+            UPDATE medicalrecruiter.recuiter_job_data
+            SET is_archived = true
+            WHERE id IN (
+                SELECT
+                    vd.id
+                FROM
+                    ValidDates vd
+                WHERE
+                    TO_DATE(deadline, 'DD/MM/YYYY') < CURRENT_DATE
+            )
+        """
+
+        cur.execute(sql)
+        conn.commit()
+        logging.info("Records updated successfully")
+        
+    except (Exception, psycopg2.Error) as error:
+        logging.error(f"Error updating records: {error}")
+        
+    finally:
+        if conn:
+            cur.close()
+            conn.close()
+            logging.info("PostgreSQL connection is closed")
+
