@@ -44,4 +44,3 @@ email_report.py: builds and sends email summary reports.
 
 db_connector.py: database connectivity and insertion logic.
 
-Next Steps
